@@ -1,0 +1,43 @@
+{
+    "goods":{
+    "status":"0",
+    "msg":"",
+    "result":[
+        {
+            "producId":"10001",
+            "productName":"小米6",
+            "producePrice":2499,
+            "productImg":"1.jpg"
+
+        },
+        {
+            "producId":"10002",
+            "productName":"苹果",
+            "producePrice":3499,
+            "productImg":"3.jpg"
+
+        },
+        {
+            "producId":"10003",
+            "productName":"pad",
+            "producePrice":4499,
+            "productImg":"3.jpg"
+
+        }
+    ]
+},
+"foods":{
+    "status":"0",
+    "msg":"",
+    "result":[
+        {
+            "foodname":"皮蛋瘦肉粥",
+            "id":"1",
+            "price":"8",
+            "oldprice":"5",
+            "description":"咸味"
+
+        }
+    ]
+}
+}
