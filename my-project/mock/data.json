@@ -7,22 +7,29 @@
             "producId":"10001",
             "productName":"小米6",
             "producePrice":2499,
-            "productImg":"1.jpg"
+            "productImg":"./static/1.jpg"
 
         },
         {
             "producId":"10002",
             "productName":"苹果",
             "producePrice":3499,
-            "productImg":"3.jpg"
+            "productImg":"./static/2.jpg"
 
         },
         {
             "producId":"10003",
             "productName":"pad",
             "producePrice":4499,
-            "productImg":"3.jpg"
+            "productImg":"./static/3.jpg"
 
+        },
+        {
+            "producId":"10004",
+            "productName":"tv",
+            "producePrice":2499,
+            "productImg":"./static/4.jpg"
+ 
         }
     ]
 },

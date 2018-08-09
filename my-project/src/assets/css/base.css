@@ -493,7 +493,7 @@ a:hover {
   text-align: center;
   font-size: 14px;
 }
-
+/* 媒体查询大小界定 */
 @media only screen and (max-width: 1280px) {
   .container {
     width: 100%;

@@ -1,6 +1,6 @@
 import axios from "axios"
-const baseURL = 'http://localhost:1024/'
+const baseURL = 'http://localhost:1024/api/'
 axios.defaults.baseURL = baseURL
 
 export const getgoods=params=>{ 
-    return axios.get('api/goods').then(res=>{ res.data.result})}
+    return axios.get('goods').then(res=>{return res.data})}
