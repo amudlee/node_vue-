@@ -16,6 +16,7 @@ import "./assets/css/checkout.css"
 import "./assets/css/login.css"
 import "./assets/css/product.css"
 
+
 /* eslint-disable no-new */
 Vue.use(VueLazyload, {
   preLoad: 1.3,

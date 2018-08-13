@@ -62,19 +62,21 @@ import {getgoods} from "@/api/index.js"
                 pricearea:[{"startprice":0,"endprice":100},{"startprice":100,"endprice":500},{"startprice":500,"endprice":1000},{"startprice":1000,"endprice":2000}],
                 priceclass:'all',
                 filterby:false,
-                filtermask:false
+                filtermask:false,
+                test:''
 
             }
         },
         created(){
            getgoods().then(res=>{
             //  this.productinfo=res.data.result
-           Object.assign(this.productinfo,res.data.result);
+           Object.assign(this.productinfo,res.data.result.list);
          })
         
         },
         mounted(){
           console.log(this.productinfo,33)
+          console.log(this.test,44)
         },
         methods:{
          changeclass(price){
