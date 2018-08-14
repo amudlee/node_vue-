@@ -28,11 +28,11 @@
                 <ul>
                   <li v-for="(item,index) in productinfo" :key="index">
                     <div class="pic">
-                      <a href="#"><img v-lazy="item.productImg" alt=""></a>
+                      <a href="#"><img v-lazy="item.productImage" alt=""></a>
                     </div>
                     <div class="main">
                       <div class="name">{{item.productName}}</div>
-                      <div class="price">{{item.producePrice}}</div>
+                      <div class="price">{{item.salePrice}}</div>
                       <div class="btn-area">
                         <a href="javascript:;" class="btn btn--m">加入购物车</a>
                       </div>
@@ -63,20 +63,18 @@ import {getgoods} from "@/api/index.js"
                 priceclass:'all',
                 filterby:false,
                 filtermask:false,
-                test:''
 
             }
         },
         created(){
            getgoods().then(res=>{
-            //  this.productinfo=res.data.result
-           Object.assign(this.productinfo,res.data.result.list);
+             this.productinfo=res.data.result.list
+          //  Object.assign(this.productinfo,res.data.result.list);
          })
         
         },
         mounted(){
           console.log(this.productinfo,33)
-          console.log(this.test,44)
         },
         methods:{
          changeclass(price){

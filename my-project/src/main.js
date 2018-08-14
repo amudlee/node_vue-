@@ -21,12 +21,12 @@ import "./assets/css/product.css"
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   // error: 'dist/error.png',
-  loading: '/static/loading-svg/loading-bubbles.svg',
+  loading: '../static/loading-svg/loading-bubbles.svg',
   attempt: 1
 })
 new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>' 
 })

@@ -8,4 +8,4 @@ import Axios from 'axios'
 Axios.defaults.baseURL = "http://localhost:3000"
 
 export const getgoods=params=>{ 
-    return Axios.get('/goods').then(res=>{return res.data})}
+    return Axios.get('/goods').then(res=>{return res})}
