@@ -7,6 +7,6 @@ var productSchema = new Schema({
     "productImage":String,
 })
 //node中匿名输出
-module.exports=mongoose.model("Good",productSchema)
+module.exports=mongoose.model("Good",productSchema,'goods')
 //##这里定义Good它会自动的和mongodb里面的good后面加s的数据表进行关联，因此就找到对应的表##
 // 如果数据库中没有注意命名可以指定module.exports=mongoose.model("Good",productSchema,"goods")

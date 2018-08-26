@@ -4,10 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
+import infiniteScroll from 'vue-infinite-scroll'
 import '../node_modules/element-ui/lib/theme-chalk/index.css';
 import VueLazyload from 'vue-lazyload'
 Vue.use(ElementUI);
 Vue.use(VueLazyload)
+Vue.use(infiniteScroll)
 Vue.config.productionTip = false
 
 // 引入组件样式文件
@@ -21,7 +23,7 @@ import "./assets/css/product.css"
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   // error: 'dist/error.png',
-  loading: '../static/loading-svg/loading-bubbles.svg',
+  loading: './@/static/loading-svg/loading-bubbles.svg',
   attempt: 1
 })
 new Vue({
