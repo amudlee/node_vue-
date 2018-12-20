@@ -10,7 +10,7 @@
         </el-breadcrumb>
         </div>
       </div>
-</template>
+</template>  
 <script>
 // 基于elementui写的动态面包屑
     export default {
@@ -31,6 +31,7 @@
         methods:{
            breadcrumb(rname){
                let matched=this.$route.matched.filter(item=>item.name);
+               console.log(this.$route.matched);
                const first=matched[0]; 
             if(first && first.name !=='首页'){//$route.name当前路由名称  ；$route.redirectedFrom重定向来源的路由的名字
              matched =[{ path: '/', meta: { title:'首页' },name:'首页'}].concat(matched)};

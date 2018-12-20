@@ -17,8 +17,9 @@
             <div class="navbar-menu-container">
               <!--<a href="/" class="navbar-link">我的账户</a>-->
               <span class="navbar-link"></span>
-              <a href="javascript:void(0)" class="navbar-link">Login</a>
-              <a href="javascript:void(0)" class="navbar-link">Logout</a>
+              <span  v-text="nickName" v-if="nickName"></span>
+              <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
+              <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="logout">Logout</a>
               <div class="navbar-cart-container">
                 <span class="navbar-cart-count"></span>
                 <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -30,18 +31,114 @@
             </div>
           </div>
         </div>
+        <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':loginModalFlag}">
+         
+          <div class="md-modal-inner">
+            <div class="md-top">
+              <div class="md-title">Login in</div>
+              <button class="md-close" @click="loginModalFlag=false">Close</button>
+            </div>
+            <div class="md-content">
+              <div class="confirm-tips">
+                <div class="error-wrap">
+                  <span class="error error-show" v-show="errorTip">用户名或者密码错误</span>
+                </div>
+                <ul>
+                  <li class="regi_form_input">
+                    <i class="icon IconPeople"></i>
+                    <input type="text" tabindex="1" name="loginname" v-model="userName" class="regi_login_input regi_login_input_left" placeholder="User Name" data-type="loginname">
+                  </li>
+                  <li class="regi_form_input noMargin">
+                    <i class="icon IconPwd"></i>
+                    <input type="password" tabindex="2"  name="password" v-model="userPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password" @keyup.enter="login">
+                  </li>
+                </ul>
+              </div>
+              <!-- 警告提示框 -->
+              <div class="login-wrap">
+                <a href="javascript:;" class="btn-login" @click="login">登  录</a>
+              </div>
+            </div>
+          </div>
+        </div>
+         <!-- 遮罩层 -->
+        <div class="md-overlay" v-if="loginModalFlag" @click="loginModalFlag=false"></div>
+         
       </header>
 
   </div>
 </template>
 
 <script>
+import "./../assets/css/login.css"
+import {loginUser} from "@/api/index.js"
+import {logoutUser} from "@/api/index.js"
   export default {
     data(){
       return {
-
+        loginModalFlag:false,
+        errorTip:false,
+        userName:"",
+        userPwd:"",
+        nickName:""
       }
     },
+    methods:{
+      login(){
+        if(!this.userName || !this.userPwd){
+            this.$message({
+              showClose: true,
+              message: '账户名称或密码不能为空',
+              type: 'warning'
+            });
+         return
+        }else{
+            this.alertMessage=false;
+            let params={
+                userName:this.userName,
+                userPwd:this.userPwd
+                }
+            loginUser(params).then(res=>{
+              this.userName=""
+              this.userPwd=""
+              if(res.data.status == 0){
+                this.errorTip=false
+                this.$message({
+                      showClose: true,
+                      message: '恭喜你，登陆成功！',
+                      type: 'success',
+                      duration:2000
+                    });
+                this.nickName=res.data.result.userName;
+                this.loginModalFlag=false
+              }else{
+                this.errorTip=true
+              }
+            }).catch(err=>{
+               this.$message({
+                    type: 'error',
+                    message: '网络错误，请重试',
+                    showClose: true,
+                    duration:1000
+                })
+            })
+            }
+      },//login
+      logout(){
+          logoutUser().then(res=>{
+            let response=res.data
+            if(response.status=="0"){
+              this.nickName=""
+              this.$message({
+                      showClose: true,
+                      message: '恭喜你，退出成功！',
+                      type: 'success',
+                      duration:1000
+                    });
+            }
+          })
+      }
+    }//methods
  
     
   }

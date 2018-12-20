@@ -8,11 +8,17 @@ var ejs = require('ejs');
 var app = express();
 //使用cors解决跨域问题，并设置响应头。注意的是一定要写在引入路由前
 var cors = require('cors'); 
-app.use(cors());
-app.all('*',function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+app.use(cors({credentials:true,origin:true})); //记得这个地方先设置跨域请求 
+app.all('*',function (req, res, next) { 
+	// 允许的请求主机名及端口号 也可以用通配符*， 表示允许所有主机请求
+  res.header('Access-Control-Allow-Origin','http://localhost:1024');
+	// 允许请求携带cookie
+  // res.Header('Access-Control-Allow-Credentials', true);
+  // 允许的请求头
   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  //允许的请求方式
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+
   res.header("X-Powered-By",' 3.2.1')
   res.header("Content-Type", "application/json;charset=utf-8");
   if (req.method == 'OPTIONS') {
@@ -37,17 +43,16 @@ app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser());//返回cookie
 app.use(express.static(path.join(__dirname, 'public')));
 // app.js只定义一级路由
 app.use('/', indexRouter);//仅仅针对访问地址是首页就会加载index模块下的数据
 app.use('/users', usersRouter);//仅仅针对访问地址是用户管理的返回
 app.use('/goods', goodsRouter);
+ 
 
-app.use(cors());  
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  
   next(createError(404));
 });
 
