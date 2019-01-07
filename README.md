@@ -16,7 +16,7 @@ npm i nodemon
 #安装mongose插件
 >$ npm i mongoose --save
 
-#在server问加价下创建moudels文件夹，创建goodlist.js用于定义goodlist数据表的表结构，并进行模块输出
+#在server文件夹下创建moudels文件夹，创建goodlist.js用于定义goodlist数据表的表结构，并进行模块输出
 >var mongose = require('mongoose')
 var Schema=mongose.Schema;//获取一个表模型  
 var productSchema = new Schema({    
@@ -93,3 +93,8 @@ router.get('/', function(req, res, next) {
   else {    
     next();
   }
+
+##后端，当一个请求有两个返回信息时，就会报错。因此要注意中间件的使用。一个请求只有一个响应结果
+>app.js中在判断是否已经登录，是根据前端在发送请求的时候是否携带cookie,如果有cookieid那么就直接next()，服务器端相应对应的路由做出响应。如果这个时候中间件也做出了返回数据，则会报错。因为相当于同一个请求响应了两个结果
+
+##模态框的组件编写，父子组件的相互影响

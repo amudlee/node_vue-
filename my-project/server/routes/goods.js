@@ -8,7 +8,7 @@ var mongoose=require('mongoose');
 var Goods=require('../models/goodslist');
 
 //链接mongodb的dumall数据库
-mongoose.connect('mongodb://127.0.0.1:27017/dumall')
+mongoose.connect('mongodb://127.0.0.1:27017/dumall',{ useNewUrlParser: true })
 //验证是否成功,监听链接成功
 mongoose.connection.on("connected",function(){ console.log("连接成功")}) 
 //验证是否成功,监听链接失败
@@ -17,7 +17,7 @@ mongoose.connection.on("error",function(){ console.log("连接失败")})
 mongoose.connection.on("disconnected",function(){ console.log("连接断开")}) 
 
 //设置二级路由，查询商品信息
-router.get('/', function(req, res, next) {
+router.get('/list', function(req, res, next) {
     // res.send('恭喜你访问了goodlist');
     //获取前段传过来的参数并且排序y
     let page=parseInt(req.param("page"));//分页

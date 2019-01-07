@@ -7,7 +7,7 @@
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
             <a href="javascript:void(0)" class="default cur">Default</a>
-            <a href="javascript:void(0)" class="price" @click='changesort()'>Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a href="javascript:void(0)" class="price" @click='changesort()'>Price <span class="el-icon-caret-bottom icon-arrow-short" :class="{'sort-up':!sortrule}"><use xlink:href="#icon-arrow-short"></use></span></a>
             <a href="javascript:void(0)" class="filterby stopPop" @click="priceshow()">Filter by</a>
           </div>
           <div class="accessory-result">
@@ -49,17 +49,45 @@
         </div>
       </div>
     <div class="md-overlay" v-show="filtermask" @click="closeprice()"></div>
+    //
+    <commonmodal v-bind:modalShow="modalShow" v-on:close="closeModal">
+      <p slot="message">
+        请先登录否则无法使用
+      </p>
+      <div slot="btnGroup">
+        <a class="btn btn-m" @click="closeModal">关闭</a>
+      </div>
+    </commonmodal>
+    <commonmodal v-bind:modalShow="modalShowCart" v-on:close="closeModal">
+      <p slot="message">
+        <svg class="icon-status-ok">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-status-ok"></use>
+        </svg>
+        <span>加入购物车成功！！！！</span>
+      </p>
+      <div slot="btnGroup"> 
+        <a class="btn btn-m" href="javascript:;" @click="closeModal">继续购物</a>  
+        <router-link class="btn btn-m" to="/cart">查看购物车</router-link>
+      </div>
+    </commonmodal>
     <commonfooter></commonfooter>
     </div>
 </template>
 
 <script>
 import commonheader from "@/components/header.vue";
+import commonmodal from "@/components/Modal.vue";
 import navbread from "@/components/navbread.vue";
 import commonfooter from "@/components/footer.vue";
 import { getgoods } from "@/api/index.js";
 import { postAddCart } from "@/api/index.js";
 export default {
+  components: {
+    commonheader,
+    navbread,
+    commonfooter,
+    commonmodal
+  },
   data() {
     return {
       rname: "goodlist",
@@ -80,13 +108,14 @@ export default {
       busy: true, //默认的流式加载是为禁用的
       loadtext: "",
       priceChecked: 0,
-      loading: false
+      loading: false,
+      modalShow: false, //模态框的默认状态为隐藏
+      modalShowCart:false
     };
   },
-  created() {
-    this.getgoodsList();
-  },
+  created() {},
   mounted() {
+    this.getgoodsList();
     console.log(this.productinfo, 33);
   },
   methods: {
@@ -152,18 +181,20 @@ export default {
       postAddCart(id).then(res => {
         console.log("data", res.data);
         if (res.data.status == 0) {
-          alert("加入成功");
+           this.modalShowCart= true;
         } else {
-          alert("加入失败");
+          if (res.data.status == 1000) {
+            this.modalShow = true;
+          }
         }
       });
+    },
+    closeModal() {
+      this.modalShow = false
+      this.modalShowCart=false
     }
-  }, //methods结尾
-  components: {
-    commonheader,
-    navbread,
-    commonfooter
-  }
+  } //methods结尾
+  
 };
 </script>
 <style>
@@ -171,5 +202,16 @@ export default {
   height: 100px;
   line-height: 100px;
   text-align: center;
+}
+.sort-up {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+  /* 旋转180° */
+  transition: all 0.3s ease-in-out;
+  /* 动画过度 */
+}
+.icon-arrow-short {
+  transition: all 0.3s ease-in-out;
 }
 </style>

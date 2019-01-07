@@ -32,7 +32,6 @@
           </div>
         </div>
         <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':loginModalFlag}">
-         
           <div class="md-modal-inner">
             <div class="md-top">
               <div class="md-title">Login in</div>
@@ -73,6 +72,7 @@
 import "./../assets/css/login.css"
 import {loginUser} from "@/api/index.js"
 import {logoutUser} from "@/api/index.js"
+import {checkLogin} from "@/api/index.js"
   export default {
     data(){
       return {
@@ -82,6 +82,16 @@ import {logoutUser} from "@/api/index.js"
         userPwd:"",
         nickName:""
       }
+    },
+     mounted(){
+       checkLogin().then(res=>{
+         console.log("初始化",res.data.status)
+         if(res.data.status=="0"){
+           this.nickName=res.data.result.userName
+         }else if(res.data.status=="1"){
+            this.nickName=""
+         }
+       })
     },
     methods:{
       login(){

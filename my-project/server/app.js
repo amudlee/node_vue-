@@ -22,7 +22,8 @@ app.all('*',function (req, res, next) {
   res.header("X-Powered-By",' 3.2.1')
   res.header("Content-Type", "application/json;charset=utf-8");
   if (req.method == 'OPTIONS') {
-    res.send(200); /让options请求快速返回/
+    res.send(200); 
+    // /让options请求快速返回/
   }
   else {
     next();
@@ -45,6 +46,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());//返回cookie
 app.use(express.static(path.join(__dirname, 'public')));
+
+//捕获路由拦截
+app.use((req,res,next)=>{
+  if(req.cookies.userId){//判断是否已经登录了，没登录就访问/users/checklogin
+    next()
+  }else{
+    if(req.originalUrl=="/users/login" || req.originalUrl=="/users/logout" || req.path=="/goods/list"){
+      next()
+    }else{
+      res.json({
+        "status":"1000",
+        "msg":'当前未登录',
+        "result":""
+      }  
+      )
+    }
+  }
+})
+
 // app.js只定义一级路由
 app.use('/', indexRouter);//仅仅针对访问地址是首页就会加载index模块下的数据
 app.use('/users', usersRouter);//仅仅针对访问地址是用户管理的返回
@@ -52,7 +72,7 @@ app.use('/goods', goodsRouter);
  
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function(req, res, next) {//捕获404
   next(createError(404));
 });
 
