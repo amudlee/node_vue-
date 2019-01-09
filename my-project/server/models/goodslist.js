@@ -5,6 +5,8 @@ var productSchema = new Schema({
     "productName":String,
     "salePrice":Number,
     "productImage":String,
+    "checked":String,
+    "productNum":String,
 })
 //node中匿名输出
 module.exports=mongoose.model("Good",productSchema,'goods')

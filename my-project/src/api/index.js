@@ -24,3 +24,12 @@ export const loginUser=params=>{//用户登录
 export const logoutUser=params=>{//用户登录
     return Axios.post('/users/logout').then(res=>{return res})
 }
+export const getCartList=params=>{//获取用户的购物车
+    return Axios.get('/users/cartList').then(res=>{return res})
+}
+export const delCar=params=>{//购物车删除
+    return Axios.post('/users/cartDel',{"productId":params}).then(res=>{return res})
+}
+export const cartEdit=params=>{//购物车单个商品列表数目更改
+    return Axios.post('/users/cartEdit',{"params":params}).then(res=>{return res})
+}   

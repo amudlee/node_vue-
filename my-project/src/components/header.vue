@@ -64,7 +64,14 @@
         <div class="md-overlay" v-if="loginModalFlag" @click="loginModalFlag=false"></div>
          
       </header>
-
+     <commonmodal v-bind:modalShow="modalShow" v-on:close="closeModal">
+        <p slot="message">
+        请先登录否则无法使用
+      </p>
+      <div slot="btnGroup">
+        <a class="btn btn-m" @click="rightNowLogin">马上登录</a>
+      </div>
+    </commonmodal>
   </div>
 </template>
 
@@ -73,14 +80,20 @@ import "./../assets/css/login.css"
 import {loginUser} from "@/api/index.js"
 import {logoutUser} from "@/api/index.js"
 import {checkLogin} from "@/api/index.js"
+import commonmodal from "@/components/Modal.vue";
   export default {
+    components: {
+    commonmodal
+  },
+    inject: ['reload'], // 引入APP.VUE里面挂载的刷新方法
     data(){
       return {
         loginModalFlag:false,
         errorTip:false,
         userName:"",
         userPwd:"",
-        nickName:""
+        nickName:"",
+        modalShow:false,
       }
     },
      mounted(){
@@ -88,8 +101,9 @@ import {checkLogin} from "@/api/index.js"
          console.log("初始化",res.data.status)
          if(res.data.status=="0"){
            this.nickName=res.data.result.userName
-         }else if(res.data.status=="1"){
+         }else if(res.data.status=="1000"){
             this.nickName=""
+            this.modalShow=true;
          }
        })
     },
@@ -121,6 +135,7 @@ import {checkLogin} from "@/api/index.js"
                     });
                 this.nickName=res.data.result.userName;
                 this.loginModalFlag=false
+                this.reload()//调用app.vue里面绑定的DOM结构加载完毕后重新载入页面刷新.
               }else{
                 this.errorTip=true
               }
@@ -145,8 +160,16 @@ import {checkLogin} from "@/api/index.js"
                       type: 'success',
                       duration:1000
                     });
+            this.reload()//调用app.vue里面绑定的DOM结构加载完毕后重新载入页面刷新.            
             }
           })
+      },
+      rightNowLogin(){
+          this.modalShow = false
+          this.loginModalFlag=true;
+      },
+      closeModal(){
+         this.modalShow = false
       }
     }//methods
  

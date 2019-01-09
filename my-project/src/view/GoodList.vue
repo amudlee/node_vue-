@@ -28,7 +28,7 @@
                 <ul>
                   <li v-for="(item,index) in productinfo" :key="index">
                     <div class="pic">
-                      <a href="#"><img :src="item.productImage" alt=""></a>
+                      <a href="#"><img :src="'/static/'+item.productImage" alt=""></a>
                      <!-- 如果这个地方用v-lazy懒加载的方式来加载图片的话，这个地方做排序后的数据请求回来图片不会重新加载 -->
                     </div>
                     <div class="main">
@@ -49,7 +49,7 @@
         </div>
       </div>
     <div class="md-overlay" v-show="filtermask" @click="closeprice()"></div>
-    //
+    <!-- //模态框1，加入购车失败 -->
     <commonmodal v-bind:modalShow="modalShow" v-on:close="closeModal">
       <p slot="message">
         请先登录否则无法使用
@@ -58,6 +58,7 @@
         <a class="btn btn-m" @click="closeModal">关闭</a>
       </div>
     </commonmodal>
+    <!-- //模态框2，加入购车成功 -->
     <commonmodal v-bind:modalShow="modalShowCart" v-on:close="closeModal">
       <p slot="message">
         <svg class="icon-status-ok">

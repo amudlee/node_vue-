@@ -21,7 +21,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST本机的ip172.30.1.188
+    host: '172.30.1.72', // can be overwritten by process.env.HOST本机的ip172.30.1.188
     port: 1024, //客户端端口
     autoOpenBrowser: false,
     errorOverlay: true,
