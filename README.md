@@ -131,8 +131,31 @@ router.get('/', function(req, res, next) {
 >在子组件中首先引入全局reload方法，export default {inject: ['reload']},
 >在子组件的某个方法中调用，methods：{reload(){this.reload}}//优雅刷新当前页面  
   
-##全选，取消全选。结合computed计算属性
-
+**全选，取消全选。结合computed计算属性
+##值得注意的点：计算属性的值是当依赖的双向数据属性的改变而改变的。计算属性的值是不能重新赋值的，
+**example,在做购物车的全选和反选的时候：
+  computed: {
+    isSelectAll() {
+      return this.checkedCount == this.cartList.length;
+    },
+    checkedCount() {
+      var i = 0;
+      this.cartList.forEach(item => {
+        if (item.checked == "1") i++;
+      });
+      return i;
+    }}
+methods:{
+	selectall(){
+	 this.isSelectAll == !this.isSelectAll; 
+	**此时无效因为computed赋值是个实时赋值的，刚跟isSelected改为false，而计算属性又会排查与isSelectAll依赖的响应式属性。发现没有变化，那么isSelected又会变回为true
+     **因此计算属性不能直接赋值，解决办法就是新定义个值存储isSlectAll的值
+      let flag = !this.isSelectAll
+      this.cartList.forEach(element => {
+        element.checked = flag?"1":"0"
+      });
+	}
+}
 
 ##价格的总和，结合computed计算属性
 
