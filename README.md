@@ -131,5 +131,9 @@ router.get('/', function(req, res, next) {
 >在子组件中首先引入全局reload方法，export default {inject: ['reload']},
 >在子组件的某个方法中调用，methods：{reload(){this.reload}}//优雅刷新当前页面  
   
+##全选，取消全选。结合computed计算属性
 
 
+##价格的总和，结合computed计算属性
+
+##引入价格格式化插件，利用自定义过滤器进行全局或者局部的价格格式化

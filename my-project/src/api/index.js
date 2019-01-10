@@ -32,4 +32,7 @@ export const delCar=params=>{//购物车删除
 }
 export const cartEdit=params=>{//购物车单个商品列表数目更改
     return Axios.post('/users/cartEdit',{"params":params}).then(res=>{return res})
-}   
+} 
+export const editCheckAll=params=>{//购物车商品全选
+    return Axios.post('/users/editCheckAll',{"checkAll":params}).then(res=>{return res})
+} 

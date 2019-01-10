@@ -198,7 +198,8 @@ router.post("/cartEdit", function(req, res, next) {
 });
 router.post("/editCheckAll", function(req, res, next) {
   var userId = req.cookies.userId,
-    checkAll = req.body.checkAll ? "1" : "0";
+    checkAll = req.body.checkAll 
+    checkAll=="1" ? "1" : "0";
   User.findOne({ userId: userId }, function(err, user) {
     if (err) {
       res.json({

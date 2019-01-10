@@ -60,7 +60,7 @@
               <li v-for="(item,index) in cartList" :key="index">
                 <div class="cart-tab-1">
                   <div class="cart-item-check">
-                    <a href="javascipt:;" class="checkbox-btn item-check-btn" :class="{'check':item.checked=='1'}" @click="editNum('checked',item)">
+                    <a href="javascript:void(0);" class="checkbox-btn item-check-btn" :class="{'check':item.checked=='1'}" @click="editNum('checked',item)">
                       <svg class="icon icon-ok">
                         <use xlink:href="#icon-ok"></use>
                       </svg>
@@ -74,7 +74,7 @@
                   </div>
                 </div>
                 <div class="cart-tab-2">
-                  <div class="item-price">{{item.salePrice}}</div>
+                  <div class="item-price">{{item.salePrice |currency("￥",2)}}</div>
                 </div>
                 <div class="cart-tab-3">
                   <div class="item-quantity">
@@ -88,11 +88,11 @@
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">{{item.productNum*item.salePrice}}</div>
+                  <div class="item-price-total">{{(item.productNum*item.salePrice) |currency("￥",2)}}</div>
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
-                    <a href="javascript:;" class="item-edit-btn" @click="delCar(item.productId)">
+                    <a href="javascript:void(0);" class="item-edit-btn" @click="delCar(item.productId)">
                       <svg class="icon icon-del">
                         <use xlink:href="#icon-del"></use>
                       </svg>
@@ -107,8 +107,8 @@
           <div class="cart-foot-inner">
             <div class="cart-foot-l">
               <div class="item-all-check">
-                <a href="javascipt:;">
-                  <span class="checkbox-btn item-check-btn">
+                <a href="javascript:void(0);"  @click="selectAll">
+                  <span class="checkbox-btn item-check-btn" :class="{'check':isSelectAll}" >
                       <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                   </span>
                   <span>Select all</span>
@@ -117,7 +117,7 @@
             </div>
             <div class="cart-foot-r">
               <div class="item-total">
-                Item total: <span class="total-price">500</span>
+                Item total: <span class="total-price">{{totalPrice |currency("￥",2)}}</span>
               </div>
               <div class="btn-wrap">
                 <a class="btn btn--red">Checkout</a>
@@ -130,8 +130,8 @@
     <commonmodal v-bind:modalShow="modalShowDel" v-on:close="closeModal">
         <p slot="message">确定要删除购物车中选中的商品吗？</p>
       <div slot="btnGroup">
-        <a class="btn btn-m" href="javascript:;" @click="closeModal">关闭</a>  
-        <a class="btn btn-m" href="javascript:;" @click="delCarSure">确认</a>  
+        <a class="btn btn-m" href="javascript:void(0);" @click="closeModal">关闭</a>  
+        <a class="btn btn-m" href="javascript:void(0);" @click="delCarSure">确认</a>  
       </div>
     </commonmodal>
     <commonfooter></commonfooter>
@@ -167,9 +167,11 @@ import commonheader from "@/components/header.vue";
 import commonmodal from "@/components/Modal.vue";
 import navbread from "@/components/navbread.vue";
 import commonfooter from "@/components/footer.vue";
-import {getCartList} from "@/api/index.js";
-import {delCar} from "@/api/index.js";
-import {cartEdit} from "@/api/index.js";
+import { getCartList } from "@/api/index.js";
+import { delCar } from "@/api/index.js";
+import { cartEdit } from "@/api/index.js";
+import { editCheckAll } from "@/api/index.js";
+// import { currency } from "@/util/currency.js";//局部引入现金保留小数点位数以及按照位数加点的插件，来自尤玉溪的github
 export default {
   components: {
     commonheader,
@@ -177,6 +179,14 @@ export default {
     commonfooter,
     commonmodal
   },
+  // filters: {//局部自定义过滤器，格式
+  //   currency:function(val){
+  //     return "val"
+  //   }
+  // },
+  // filters: {
+  //   // currency:currency//局部设置自定义价格过滤器，用于总金额的格式转换
+  // },
   inject: ["reload"], // 引入APP.VUE里面挂载的刷新方法
   data() {
     return {
@@ -184,11 +194,30 @@ export default {
       modalShow: false,
       modalShowDel: false,
       cartList: [],
-      DelCarId: ""
+      DelCarId: "",
     };
   },
   mounted() {
     this.getCart();
+  },
+  computed: {
+    isSelectAll() {
+      return this.checkedCount == this.cartList.length;
+    },
+    checkedCount() {
+      var i = 0;
+      this.cartList.forEach(item => {
+        if (item.checked == "1") i++;
+      });
+      return i;
+    },
+    totalPrice(){
+      var price=0
+      this.cartList.forEach(item => {
+        if (item.checked == "1")price +=item.productNum*item.salePrice;
+      });
+      return price
+    }
   },
   methods: {
     getCart() {
@@ -204,6 +233,7 @@ export default {
       this.DelCarId = productId;
       this.modalShowDel = true;
     },
+    //确定删除购物车
     delCarSure() {
       delCar(this.DelCarId).then(res => {
         const response = res.data;
@@ -227,30 +257,56 @@ export default {
       });
     },
     //加减控件, 选中商品和取消选中
-    editNum(flag,item){
-      if(flag=="add"){
-        item.productNum++
-      }else if(flag=="minus"){
-        if(item.productNum<=1){
-          return
+    editNum(flag, item) {
+      if (flag == "add") {
+        item.productNum++;
+      } else if (flag == "minus") {
+        if (item.productNum <= 1) {
+          return;
         }
-         item.productNum--
-      }else if(flag=="checked"){
-        item.checked=="1"? item.checked="0":item.checked="1"
+        item.productNum--;
+      } else if (flag == "checked") {
+        item.checked == "1" ? (item.checked = "0") : (item.checked = "1");
+        // if (item.checked == "1") {
+        //   this.totalPrice += item.productNum * item.salePrice;
+        // } else if (item.checked == "0") {
+        //   this.totalPrice = this.totalPrice - item.productNum * item.salePrice;
+        // }
       }
-      const params={
-        "productId":item.productId,
-        "productNum":item.productNum,
-        "checked":item.checked,
-      }
-      cartEdit(params).then(res=>{
+      const params = {
+        productId: item.productId,
+        productNum: item.productNum,
+        checked: item.checked
+      };
+      cartEdit(params).then(res => {
         const response = res.data;
         if (response.status == 0) {
-            console.log("数量修改成功")
+          console.log("数量修改成功");
         } else {
-           console.log("数量修改失败")
+          console.log("数量修改失败");
         }
-      })
+      });
+    },
+    //全选
+    selectAll() {
+      // this.isSelectAll == !this.isSelectAll;因为computed赋值是个实时赋值的，刚跟isSelected改为false，而计算属性又会排查与isSelectAll依赖的响应式属性。发现没有变化，那么isSelected又会变回为true
+      //因此计算属性不能直接赋值，解决办法就是新定义个值存储isSlectAll的值
+      let flag = !this.isSelectAll
+      this.cartList.forEach(element => {
+        element.checked = flag?"1":"0"
+      });
+      editCheckAll(flag?"1":"0")
+        .then(response => {
+          let res = response.data;
+          if (res.status == "0") {
+            this.getCart();
+          } else {
+            console.log("失败");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     //模态框
     closeModal() {
