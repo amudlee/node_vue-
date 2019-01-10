@@ -131,32 +131,35 @@ router.get('/', function(req, res, next) {
 >在子组件中首先引入全局reload方法，export default {inject: ['reload']},
 >在子组件的某个方法中调用，methods：{reload(){this.reload}}//优雅刷新当前页面  
   
-**全选，取消全选。结合computed计算属性
-##值得注意的点：计算属性的值是当依赖的双向数据属性的改变而改变的。计算属性的值是不能重新赋值的，
-**example,在做购物车的全选和反选的时候：
-  computed: {
-    isSelectAll() {
-      return this.checkedCount == this.cartList.length;
-    },
-    checkedCount() {
-      var i = 0;
-      this.cartList.forEach(item => {
-        if (item.checked == "1") i++;
-      });
-      return i;
-    }}
-methods:{
-	selectall(){
-	 this.isSelectAll == !this.isSelectAll; 
-	**此时无效因为computed赋值是个实时赋值的，刚跟isSelected改为false，而计算属性又会排查与isSelectAll依赖的响应式属性。发现没有变化，那么isSelected又会变回为true
-     **因此计算属性不能直接赋值，解决办法就是新定义个值存储isSlectAll的值
-      let flag = !this.isSelectAll
-      this.cartList.forEach(element => {
-        element.checked = flag?"1":"0"
-      });
-	}
-}
+**全选，取消全选。结合computed计算属性  
+##值得注意的点：计算属性的值是当依赖的双向数据属性的改变而改变的。计算属性的值是不能重新赋值的，  
+**example,在做购物车的全选和反选的时候：  
+>computed: {  
+>  isSelectAll() {return this.checkedCount == this.cartList.length;},  
+>  checkedCount() {var i = 0;this.cartList.forEach(item => {if (item.checked == "1") i++;});return i;}  
+>  }，  
+>  methods:{  
+  selectall(){this.isSelectAll == !this.isSelectAll;  
+ //此时无效因为computed赋值是个实时赋值的，刚跟isSelected改为false，而计算属性又会排查与isSelectAll依赖的响应式属性。发现没有变化，那么isSelected又会变回为true  
+ **因此计算属性不能直接赋值，解决办法就是新定义个值存储isSlectAll的值  
+> let flag = !this.isSelectAl  
+> lthis.cartList.forEach(element => {element.checked = flag?"1":"0"});}}
 
-##价格的总和，结合computed计算属性
+###价格的总和，结合computed计算属性.### 
+>**当项目中某个属性的值依赖与很多数据具有联动性的时候考虑用computed。**  
+比如价格的总和，需要牵扯到cartList.checked,cartList.productNum,cartList.saleprice。
+carLis为双向数据，将其设置为计算属性的依赖属性。这样不管是界面中的购物车商品有无选中，数量有无变化，价格有无增多逗会影响到totalPrice
 
 ##引入价格格式化插件，利用自定义过滤器进行全局或者局部的价格格式化
+>**引入数字格式化插件currency.js(现金保留小数点位数以及按照位数加点的插件)**  
+引入的地址为尤雨溪的github地址https://github.com/vuejs/vuex/tree/dev/examples/shopping-cart  
+使用方法：1.变为全局格式化插件：  
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;在main.js中引入，import {currency} from "./util/currency.js";  
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;定义全局过滤器：Vue.filter("currency",currency)  
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;在任意的子组件中使用这个全局的价格过滤器。在应该进行金额数字格式化的地方{{item.salePrice |currency("￥",2)}}参数1，需要格式化的金额。参数2.使用的过滤器名称currency。currency（金额的单位符号，需要保留的小数点位数）  
+2.作为局部的格式化插件：  
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;在要使用插件的子组件中引入，import { currency } from "@/util/currency.js";  
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;在子组件导出的对象中定义filter过滤器，  
+>&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;export default { filters: {
+ currency:currency//局部设置自定义价格过滤器，用于总金额的格式转换
+},}

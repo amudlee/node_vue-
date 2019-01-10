@@ -267,11 +267,6 @@ export default {
         item.productNum--;
       } else if (flag == "checked") {
         item.checked == "1" ? (item.checked = "0") : (item.checked = "1");
-        // if (item.checked == "1") {
-        //   this.totalPrice += item.productNum * item.salePrice;
-        // } else if (item.checked == "0") {
-        //   this.totalPrice = this.totalPrice - item.productNum * item.salePrice;
-        // }
       }
       const params = {
         productId: item.productId,
