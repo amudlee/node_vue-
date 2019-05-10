@@ -45,7 +45,6 @@ router.post("/login", function(req, res, next) {
     }
   });
 });
-
 //登出接口
 router.post("/logout", function(req, res, next) {
   console.log("进入了退出登录");
@@ -66,7 +65,6 @@ router.post("/logout", function(req, res, next) {
 
 router.get("/checklogin", function(req, res, next) {
   if (req.cookies.userId) {
-    console.log(req.cookies.userName, "123");
     res.json({
       status: "0",
       msg: "",
@@ -82,7 +80,6 @@ router.get("/checklogin", function(req, res, next) {
 });
 router.get("/getCartCount", function(req, res, next) {
   if (req.cookies && req.cookies.userId) {
-    console.log("userId:" + req.cookies.userId);
     var userId = req.cookies.userId;
     User.findOne({ userId: userId }, function(err, doc) {
       if (err) {
@@ -172,7 +169,6 @@ router.post("/cartEdit", function(req, res, next) {
     productId = req.body.params.productId,
     productNum = req.body.params.productNum,
     checked = req.body.params.checked;
-    console.log(req)
   User.update(
     { userId: userId, "cartList.productId": productId },
     {
@@ -196,6 +192,7 @@ router.post("/cartEdit", function(req, res, next) {
     }
   );
 });
+//全选
 router.post("/editCheckAll", function(req, res, next) {
   var userId = req.cookies.userId,
     checkAll = req.body.checkAll 
@@ -298,7 +295,6 @@ router.post("/setDefault", function(req, res, next) {
     });
   }
 });
-
 //删除地址接口
 router.post("/delAddress", function(req, res, next) {
   var userId = req.cookies.userId,
@@ -333,9 +329,10 @@ router.post("/delAddress", function(req, res, next) {
 });
 
 router.post("/payMent", function(req, res, next) {
-  var userId = req.cookies.userId,
-    addressId = req.body.addressId,
-    orderTotal = req.body.orderTotal;
+  var userId = req.cookies.userId;
+  var  addressId = req.body.addressId;
+  var  orderTotal = req.body.orderTotal;
+    console.log(addressId,'addressId')
   User.findOne({ userId: userId }, function(err, doc) {
     if (err) {
       res.json({
@@ -347,6 +344,7 @@ router.post("/payMent", function(req, res, next) {
       var address = "",
         goodsList = [];
       //获取当前用户的地址信息
+      doc.orderTotal=orderTotal
       doc.addressList.forEach(item => {
         if (addressId == item.addressId) {
           address = item;
@@ -358,12 +356,12 @@ router.post("/payMent", function(req, res, next) {
           goodsList.push(item);
         }
       });
-
-      var platform = "622";
+      //订单号的生成：
+      var platform = "622";//制定的平台的码
       var r1 = Math.floor(Math.random() * 10);
       var r2 = Math.floor(Math.random() * 10);
 
-      var sysDate = new Date().Format("yyyyMMddhhmmss");
+      var sysDate = new Date().Format("yyyyMMddhhmmss");//这地方的format方法是util/ util.js在DATE原型上绑定的
       var createDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
       var orderId = platform + r1 + sysDate + r2;
       var order = {
@@ -401,7 +399,7 @@ router.post("/payMent", function(req, res, next) {
 //根据订单Id查询订单信息
 router.get("/orderDetail", function(req, res, next) {
   var userId = req.cookies.userId,
-    orderId = req.param("orderId");
+    orderId = req.params("orderId");
   User.findOne({ userId: userId }, function(err, userInfo) {
     if (err) {
       res.json({

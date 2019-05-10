@@ -1,4 +1,4 @@
-# lwjtest
+#vue+node.js仿写商城
 
 > A Vue.js project
 
@@ -20,6 +20,13 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-##商品价格排序
+##网页总思路
+>1.vue实例挂载到<div id="app">上，设置好路由文件中的组件关系，确认模板元素
+>new Vue({ 
+>    el:"#app",
+>    router,
+>    components:{App}
+>    template:"<App/>"
+> })
+>
 
-##商品价格条件查询

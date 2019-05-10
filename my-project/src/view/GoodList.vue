@@ -1,7 +1,7 @@
 <template>
     <div >    
-        <commonheader></commonheader>
-        <navbread :routeval='rname'></navbread>    
+      <commonheader></commonheader>
+      <navbread :routeval='rname'></navbread>    
       <div class="accessory-result-page accessory-page">
         <div class="container">
           <div class="filter-nav">
@@ -98,7 +98,7 @@ export default {
         { startprice: 100, endprice: 500 },
         { startprice: 500, endprice: 1000 },
         { startprice: 1000, endprice: 5000 }
-      ],
+        ],
       priceclass: "all",
       filterby: false,
       filtermask: false,
@@ -117,12 +117,10 @@ export default {
   created() {},
   mounted() {
     this.getgoodsList();
-    console.log(this.productinfo, 33);
   },
   methods: {
     changeclass(price) {
       //点击价格区间更改字体颜色并且排序
-      console.log(price);
       this.page = 1;
       this.priceclass = price;
       this.getgoodsList();
@@ -180,7 +178,6 @@ export default {
     },
     addCart(id) {
       postAddCart(id).then(res => {
-        console.log("data", res.data);
         if (res.data.status == 0) {
            this.modalShowCart= true;
         } else {
@@ -195,7 +192,6 @@ export default {
       this.modalShowCart=false
     }
   } //methods结尾
-  
 };
 </script>
 <style>

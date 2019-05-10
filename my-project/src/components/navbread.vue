@@ -3,7 +3,7 @@
         <div class="nav-breadcrumb-wrap">
         <div class="container">
           <el-breadcrumb separator=">" class="nav-breadcrumb">
-             <el-breadcrumb-item v-for=" (item,index) in levellist" :key="item.path" v-if="item.name">
+             <el-breadcrumb-item v-for=" (item,index) in levellist" :key="item.path"  v-if= "item.name">
               <span v-if='item.redirect==="noredirect"||index==levellist.length-1' class="no-redirect">{{item.name}}</span>
               <router-link  v-else :to="item.redirect||item.path">{{item.name}}</router-link>
              </el-breadcrumb-item>           
@@ -23,7 +23,7 @@
         created(){
             this.breadcrumb(this.routeval)
         },
-        watch:{
+        watch:{ 
             $route(){
                this.breadcrumb(this.routeval) 
             }

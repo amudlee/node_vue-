@@ -36,3 +36,19 @@ export const cartEdit=params=>{//购物车单个商品列表数目更改
 export const editCheckAll=params=>{//购物车商品全选
     return Axios.post('/users/editCheckAll',{"checkAll":params}).then(res=>{return res})
 } 
+export const getAddress=params=>{//查询收货地址
+    return Axios.get('/users/addressList').then(res=>{return res})
+} 
+export const setDefault=params=>{//设置默认地址
+    return Axios.post('/users/setDefault',{"addressId":params}).then(res=>{return res})
+} 
+export const delAddress=params=>{//设置默认地址
+    return Axios.post('/users/delAddress',{"addressId":params}).then(res=>{return res})
+} 
+export const checkOderInfo=params=>{//订单确认页面查询商品被选中要付款
+    return Axios.get('/users/orderDetail',{params:params}).then(res=>{ return res})
+}
+export const payment=params=>{//订单确认页面查询商品被选中要付款
+    return Axios.post('/users/payMent',{"params":params}).then(res=>{ return res})
+
+}

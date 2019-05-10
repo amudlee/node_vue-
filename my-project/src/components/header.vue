@@ -98,7 +98,6 @@ import commonmodal from "@/components/Modal.vue";
     },
      mounted(){
        checkLogin().then(res=>{
-         console.log("初始化",res.data.status)
          if(res.data.status=="0"){
            this.nickName=res.data.result.userName
          }else if(res.data.status=="1000"){

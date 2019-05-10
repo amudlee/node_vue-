@@ -11,7 +11,7 @@ var cors = require('cors');
 app.use(cors({credentials:true,origin:true})); //记得这个地方先设置跨域请求 
 app.all('*',function (req, res, next) { 
 	// 允许的请求主机名及端口号 也可以用通配符*， 表示允许所有主机请求
-  res.header('Access-Control-Allow-Origin','http://172.30.1.72:1024');
+  res.header('Access-Control-Allow-Origin','http://localhost:1024');
 	// 允许请求携带cookie
   // res.Header('Access-Control-Allow-Credentials', true);
   // 允许的请求头

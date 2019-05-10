@@ -88,7 +88,7 @@
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">{{(item.productNum*item.salePrice) |currency("￥",2)}}</div>
+                  <div class="item-price-total">{{(item.productNum*item.salePrice) | currency("￥",2)}}</div>
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
@@ -120,7 +120,7 @@
                 Item total: <span class="total-price">{{totalPrice |currency("￥",2)}}</span>
               </div>
               <div class="btn-wrap">
-                <a class="btn btn--red">Checkout</a>
+                <a class="btn btn--red" :class="{'btn--dis':checkedCount==0}" @click="checkOut">Checkout</a>
               </div>
             </div>
           </div>
@@ -303,6 +303,15 @@ export default {
           console.log(error);
         });
     },
+    //去付款
+    checkOut(){
+      if(this.checkedCount>0){
+        this.$router.push({
+          path: '/address'}
+        )
+      }
+    },
+    
     //模态框
     closeModal() {
       this.modalShowDel = false;
