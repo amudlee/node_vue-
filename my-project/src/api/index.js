@@ -50,5 +50,7 @@ export const checkOderInfo=params=>{//订单确认页面查询商品被选中要
 }
 export const payment=params=>{//订单确认页面查询商品被选中要付款
     return Axios.post('/users/payMent',{"params":params}).then(res=>{ return res})
-
+}
+export const getCartCount=params=>{
+    return Axios.get('/users/getCartCount',{params:params}).then(res=>{ return res})
 }

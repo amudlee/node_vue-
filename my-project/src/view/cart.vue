@@ -260,11 +260,13 @@ export default {
     editNum(flag, item) {
       if (flag == "add") {
         item.productNum++;
+        this.$store.commit("addCount")
       } else if (flag == "minus") {
         if (item.productNum <= 1) {
           return;
         }
         item.productNum--;
+        this.$store.commit("reduce")
       } else if (flag == "checked") {
         item.checked == "1" ? (item.checked = "0") : (item.checked = "1");
       }

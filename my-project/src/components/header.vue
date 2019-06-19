@@ -21,7 +21,7 @@
               <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
               <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="logout">Logout</a>
               <div class="navbar-cart-container">
-                <span class="navbar-cart-count"></span>
+                <span class="navbar-cart-count">{{cartCount}}</span>
                 <a class="navbar-link navbar-cart-link" href="/#/cart">
                   <svg class="navbar-cart-logo">
                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
@@ -80,6 +80,7 @@ import "./../assets/css/login.css"
 import {loginUser} from "@/api/index.js"
 import {logoutUser} from "@/api/index.js"
 import {checkLogin} from "@/api/index.js"
+import {getCartCount} from "@/api/index.js"
 import commonmodal from "@/components/Modal.vue";
   export default {
     components: {
@@ -92,17 +93,27 @@ import commonmodal from "@/components/Modal.vue";
         errorTip:false,
         userName:"",
         userPwd:"",
-        nickName:"",
         modalShow:false,
+        nickName:''
+      }
+    },
+    computed: {
+      cartCount(){
+        return this.$store.state.cartCountx
       }
     },
      mounted(){
        checkLogin().then(res=>{
          if(res.data.status=="0"){
-           this.nickName=res.data.result.userName
+           this.nickName=this.$store.state.userName
          }else if(res.data.status=="1000"){
             this.nickName=""
             this.modalShow=true;
+         }
+       })
+       getCartCount().then(res=>{
+         if(res.data.status==0){
+           this.$store.commit("cartCount",res.data.result) 
          }
        })
     },
@@ -126,13 +137,14 @@ import commonmodal from "@/components/Modal.vue";
               this.userPwd=""
               if(res.data.status == 0){
                 this.errorTip=false
+                this.$store.commit("changeUserName",res.data.result.userName)
                 this.$message({
                       showClose: true,
                       message: '恭喜你，登陆成功！',
                       type: 'success',
                       duration:2000
                     });
-                this.nickName=res.data.result.userName;
+                this.nickName=this.$store.state.userName;
                 this.loginModalFlag=false
                 this.reload()//调用app.vue里面绑定的DOM结构加载完毕后重新载入页面刷新.
               }else{
@@ -151,8 +163,9 @@ import commonmodal from "@/components/Modal.vue";
       logout(){
           logoutUser().then(res=>{
             let response=res.data
-            if(response.status=="0"){
+            if(response.status=="0"){ 
               this.nickName=""
+              this.$store.commit("changeUserName","")
               this.$message({
                       showClose: true,
                       message: '恭喜你，退出成功！',

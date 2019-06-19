@@ -74,6 +74,11 @@
     <commonfooter></commonfooter>
     </div>
 </template>
+<script>
+ import '@/assets/js/prism.js'
+ import '@/assets/js/intlTelInput.js'
+ import '@/assets/js/modifyCountryData.js'
+</script>
 
 <script>
 import commonheader from "@/components/header.vue";
@@ -186,6 +191,7 @@ export default {
           }
         }
       });
+      this.$store.commit("addCount") 
     },
     closeModal() {
       this.modalShow = false
@@ -195,6 +201,9 @@ export default {
 };
 </script>
 <style>
+@import '../assets/css/intlTelInput.css';
+@import '../assets/css/prism.css';
+@import '../assets/css/demo.css';
 .loadmore {
   height: 100px;
   line-height: 100px;

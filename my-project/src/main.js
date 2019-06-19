@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'//引入根组件
 import router from './router'//引入路由配置文件,index.js可以省略不写
-import store from './store/store.js'//引入路由配置文件
+import store from './store/store.js'//引入vuex配置文件
 import ElementUI from 'element-ui'
 import infiniteScroll from 'vue-infinite-scroll'
 import '../node_modules/element-ui/lib/theme-chalk/index.css';
